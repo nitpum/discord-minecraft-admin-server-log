@@ -1,0 +1,11 @@
+config.yaml
+config.yml
+*.yaml
+*.yml
+
+!*.example.yaml
+!*.example.yml
+!.github/*/*.yaml
+!.github/*/*.yml
+
+inaho
