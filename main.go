@@ -17,7 +17,14 @@ type Embed struct {
 }
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("Missing log file")
+		fmt.Println("Usage: <path/to/logfile> <webhookUrl>")
+		return
+	}
+
 	if len(os.Args) < 3 {
+		fmt.Println("Missing webook url")
 		fmt.Println("Usage: <path/to/logfile> <webhookUrl>")
 		return
 	}
@@ -26,11 +33,12 @@ func main() {
 	webhookUrl := os.Args[2]
 	file, err := os.Open(filePath)
 	if err != nil {
-		log.Fatalln("Can't read log file")
+		log.Fatalf("Can't read log file %v \n", filePath)
 		return
 	}
 	defer file.Close()
 
+	fmt.Println("Start")
 	reader := bufio.NewReader(file)
 
 	fileInfo, err := file.Stat()
@@ -61,13 +69,17 @@ func main() {
 					}
 				}
 				continue
+			} else {
+				log.Printf("Error %v\n", err)
 			}
+
 			break
 		}
 
 		go postWebhook(webhookUrl, line)
 		fmt.Printf("%s", string(line))
 	}
+	fmt.Println("End")
 }
 
 func isTruncated(file *os.File) (bool, error) {
