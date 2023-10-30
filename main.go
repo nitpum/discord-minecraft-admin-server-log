@@ -39,7 +39,6 @@ func main() {
 	defer file.Close()
 
 	fmt.Println("Start")
-	reader := bufio.NewReader(file)
 
 	fileInfo, err := file.Stat()
 	if err != nil {
@@ -50,6 +49,8 @@ func main() {
 	// Read from last line
 	fileSize := fileInfo.Size()
 	file.Seek(fileSize, io.SeekStart)
+
+	reader := bufio.NewReader(file)
 
 	for {
 		line, err := reader.ReadString('\n')
